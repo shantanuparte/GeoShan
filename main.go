@@ -2,12 +2,17 @@ package main
 
 import (
 	"fmt"
+	"os"
+
+	"GeoShan/weather"
+
 	"charm.land/lipgloss/v2"
-	weather/weathers
 )
 
 func main() {
 	fmt.Println("This is start of the project")
+	place := os.Args[1]
+
 	style := lipgloss.NewStyle().
 		Bold(true).
 		Foreground(lipgloss.Color("#FAFAFA")).
@@ -16,6 +21,5 @@ func main() {
 
 	fmt.Println(style.Render("Hello, my first lipgloss project"))
 
-	getWeatherInfo()
-
+	weathers.GetWeatherInfo(place)
 }
