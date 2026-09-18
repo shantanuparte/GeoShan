@@ -14,6 +14,8 @@ type ApiInfo struct {
 	Precipitation float32 `json:"precipitation"`
 }
 
+
+
 type Location struct {
 	Lat     float64 `json:"latitude"`
 	Lon     float64 `json:"longitude"`

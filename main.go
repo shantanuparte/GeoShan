@@ -24,12 +24,22 @@ func main() {
 
 	var something *weathers.Location
 
-	something, err := weathers.GetWeatherInfo(upper_place)
+	something, err := weathers.GetLocatoinCoordinates(upper_place)
 	if err != nil {
 		fmt.Printf("Error: %v\n", err)
 		return
 	}
 
 	fmt.Println(something)
+	
+	var weather_info *weathers.ApiInfo
 
+	weather_info, err = weathers.GetWeatherInfo(something)
+	if err != nil{
+		fmt.Printf("Error: %v", err)
+		return
+	}
+
+	fmt.Println(weather_info)
+	
 }
