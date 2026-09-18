@@ -21,15 +21,15 @@ func main() {
 		Align(lipgloss.Center)
 
 	fmt.Println(style.Render(upper_place))
-	
-	var something *weathers.ApiInfo
-	
+
+	var something *weathers.Location
+
 	something, err := weathers.GetWeatherInfo(upper_place)
 	if err != nil {
-		fmt.Printf("Error: %v", err)
+		fmt.Printf("Error: %v\n", err)
 		return
 	}
-	
+
 	fmt.Println(something)
-	
+
 }

@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func GetWeatherInfo(place string) (*ApiInfo, error) {
+func GetWeatherInfo(place string) (*Location, error) {
 	client := &http.Client{
 		Timeout: time.Second * 5,
 	}
@@ -17,7 +17,7 @@ func GetWeatherInfo(place string) (*ApiInfo, error) {
 
 	resp, err := client.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("Error in getting response")
+		return nil, fmt.Errorf("Error in getting response: %v",err)
 	}
 
 	if resp.StatusCode != http.StatusOK {
@@ -26,14 +26,14 @@ func GetWeatherInfo(place string) (*ApiInfo, error) {
 	defer resp.Body.Close()
 
 	//Unmarshalling
-	var WeathInfo ApiInfo
+	var data Response
 
-	err = json.NewDecoder(resp.Body).Decode(&WeathInfo)
+	err = json.NewDecoder(resp.Body).Decode(&data)
 	if err != nil {
 		return nil, fmt.Errorf("Failed to decode")
 	}
 
-	return &WeathInfo, nil
+	return &data.Results[0], nil
 
 }
 
