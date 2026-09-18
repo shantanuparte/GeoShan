@@ -26,6 +26,7 @@ func main() {
 
 	something, err := weathers.GetLocatoinCoordinates(upper_place)
 	if err != nil {
+		
 		fmt.Printf("Error: %v\n", err)
 		return
 	}

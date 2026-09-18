@@ -80,6 +80,6 @@ func buildUrl(place string) string {
 
 func buildWeatherUrl(lat, lon float64) string {
 
-	return fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.6f&longitude=%.6f&current_weather=true", lat, lon)
+	return fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.6f&longitude=%.6f&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,precipitation", lat, lon)
 
 }
