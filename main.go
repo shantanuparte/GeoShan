@@ -4,8 +4,9 @@ import (
 	weathers "GeoShan/weather"
 	"fmt"
 	"os"
-	"github.com/common-nighthawk/go-figure"
+
 	"charm.land/lipgloss/v2"
+	"github.com/common-nighthawk/go-figure"
 )
 
 var style = lipgloss.NewStyle().
@@ -39,18 +40,15 @@ func main() {
 		return
 	}
 
-	
-	Render(location,weather)
-	
-	
+	Render(location, weather)
+
 }
 
-func Render(location *weathers.Location, weather *weathers.ApiInfo)(){
-	
-	fig := figure.NewFigure(location.Name, "doom",true)
-	fig.Print()
-	fmt.Println(style.Render(location.Name))
-	fmt.Println(weather)
-	fmt.Println(location)
+func Render(location *weathers.Location, weather *weathers.ApiInfo) {
 
+	fig := figure.NewFigure(location.Name, "doom", true)
+	fig.Print()
+	fmt.Println(location.Country)
+	fmt.Printf("Temprature: %v\t Wind: %v\nHumidity: %v\tPrecipitation: %v\n", weather.Current.Temp, weather.Current.Wind, weather.Current.Humidity, weather.Current.Precipitation)
+	fmt.Printf("   %v",weathers.WeahterCodeConvertion(weather.Current.WeatherInfo))
 }
