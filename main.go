@@ -4,7 +4,6 @@ import (
 	weathers "GeoShan/weather"
 	"fmt"
 	"os"
-
 	"charm.land/lipgloss/v2"
 )
 
@@ -35,6 +34,7 @@ func main() {
 		fmt.Printf("Country: %v\nCity: %v\nLatitude: %v\nLongitude: %v\n", something.Country, something.Name, something.Lat, something.Lon)
 
 		fmt.Println(weather_info)
+		fmt.Println(weathers.WeahterCodeConvertion(weather_info.Current.WeatherInfo))
 
 	} else {
 		var coordinates *weathers.Location

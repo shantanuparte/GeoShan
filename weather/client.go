@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"net/http"
 	"net/url"
-	"time"
-	"strings"
 	"strconv"
+	"strings"
+	"time"
 )
 
 func GetLocatoinCoordinates(place string) (*Location, error) {
@@ -103,29 +103,27 @@ func GetLocatoinCoordinatesWithoutArguments() (*Location, error) {
 	//Spliting through "," cause only one loc comes you forget it
 	parts := strings.Split(coordinates.Loc, ",")
 
-	if len(parts) != 2{
+	if len(parts) != 2 {
 		return nil, errors.New("Invalid location coordinates")
 	}
 	lat, err := strconv.ParseFloat(parts[1], 64)
-	if err != nil{
-		return nil, fmt.Errorf("Invalid longitude: %w",err)
-	}
-	
-	lon, err := strconv.ParseFloat(parts[1],64)
-	if err != nil{
+	if err != nil {
 		return nil, fmt.Errorf("Invalid longitude: %w", err)
 	}
 
+	lon, err := strconv.ParseFloat(parts[1], 64)
+	if err != nil {
+		return nil, fmt.Errorf("Invalid longitude: %w", err)
+	}
 
 	return &Location{
-		Lat: lat,
-		Lon: lon,
-		Name: coordinates.City,
+		Lat:     lat,
+		Lon:     lon,
+		Name:    coordinates.City,
 		Country: coordinates.Con,
 	}, nil
 
 }
-
 
 func buildUrl(place string) string {
 	encodePlace := url.QueryEscape(place)
@@ -135,17 +133,45 @@ func buildUrl(place string) string {
 func buildWeatherUrl(lat, lon float64) string {
 
 	return fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.6f&longitude=%.6f&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,precipitation", lat, lon)
-	
+
 }
 
 func buildLocationUrl() string {
 	return "https://ipinfo.io/json"
 }
 
+func WeahterCodeConvertion(code uint8) string {
 
-func WeahterCodeConvertion(code uint8)(condition string, err error){
+	wmap := map[uint8]string{
+		0:  "Clear sky",
+		1:  "Mainly clear",
+		2:  "Partly cloudy",
+		3:  "Overcast",
+		45: "Fog",
+		48: "Depositing rime fog",
+		51: "Light drizzle",
+		53: "Moderate drizzle",
+		55: "Dense intensity drizzle",
+		56: "Light freezing drizzle",
+		57: "Dense",
+		61: "Slight rain",
+		63: "Moderate rain",
+		65: "Heavy rain",
+		66: "Light freezing rain",
+		67: "Heavy freezing rain",
+		71: "Slight snowfall",
+		73: "Moderate snowfall",
+		75: "Heavy snowfall",
+		77: "Snow grains",
+		80: "Slight rain showers",
+		81: "Moderate rain showers",
+		82: "Violent rain showers",
+		85: "Slight snow showers",
+		86: "Heavy snow showers",
+		95: "Thumderstorm",
+		96: "Thunderstorm with slight hail",
+		99: "Thunderstorm with heavy hail",
+	}
 
-	
-
-	return "string lol", nil
+	return wmap[code]
 }
