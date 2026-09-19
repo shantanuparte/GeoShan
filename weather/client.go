@@ -34,7 +34,7 @@ func GetLocatoinCoordinates(place string) (*Location, error) {
 		return nil, fmt.Errorf("Failed to decode")
 	}
 
-	if len(data.Results) == 0{
+	if len(data.Results) == 0 {
 		return nil, errors.New("location not found")
 	}
 
@@ -47,29 +47,57 @@ func GetWeatherInfo(info *Location) (*ApiInfo, error) {
 	client := &http.Client{
 		Timeout: time.Second * 5,
 	}
-	
+
 	url := buildWeatherUrl(info.Lat, info.Lon)
 
 	resp, err := client.Get(url)
-	if err != nil{
-		return nil, fmt.Errorf("Error in respose: %v\n",err)
+	if err != nil {
+		return nil, fmt.Errorf("Error in respose: %w\n", err)
 	}
 	defer resp.Body.Close()
 
-	
-	if resp.StatusCode != http.StatusOK{
+	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("Error in status: %v\n", resp.StatusCode)
 	}
-	
-	
+
 	//Unmarshalling
 	var api ApiInfo
 	err = json.NewDecoder(resp.Body).Decode(&api)
-	if err != nil{
-		return nil, fmt.Errorf("failed to decode: %v\n",err)
+	if err != nil {
+		return nil, fmt.Errorf("failed to decode: %w\n", err)
 	}
 
 	return &api, nil
+
+}
+
+func GetLocatoinCoordinatesWithoutArguments() (*Location, error) {
+
+	client := &http.Client{
+		Timeout: time.Second * 5,
+	}
+
+	url := buildLocationUrl()
+	resp, err := client.Get(url)
+	if err != nil {
+		return nil, fmt.Errorf("Error: %w\n", err)
+
+	}
+
+	if resp.StatusCode != http.StatusOK{
+		return nil, fmt.Errorf("Error: %v\n",resp.Status)
+	}
+	defer resp.Body.Close()
+
+	//Unmarshalling
+	var coordinates Location
+	err = json.NewDecoder(resp.Body).Decode(&coordinates)
+	
+	if err != nil{
+		return nil, fmt.Errorf("Error in unmarshalling: %w\n",err)
+	}
+
+	return &coordinates, nil
 
 }
 
@@ -82,4 +110,8 @@ func buildWeatherUrl(lat, lon float64) string {
 
 	return fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.6f&longitude=%.6f&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,precipitation", lat, lon)
 
+}
+
+func buildLocationUrl() string {
+	return "https://ipapi.co/json/"
 }

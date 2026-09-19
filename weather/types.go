@@ -16,11 +16,8 @@ type ApiInfo struct {
 	} `json:"current"`
 }
 
-
-
 type Location struct {
 	Lat     float64 `json:"latitude"`
 	Lon     float64 `json:"longitude"`
-	Name    string  `json:"name"`
 	Country string  `json:"country"`
 }
