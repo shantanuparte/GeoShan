@@ -1,7 +1,6 @@
 package weathers
 
-
-type Response struct{
+type Response struct {
 	Results []Location `json:"results"`
 }
 
@@ -16,8 +15,15 @@ type ApiInfo struct {
 	} `json:"current"`
 }
 
+type NoArg struct {
+	City string `json:"city"`
+	Con  string `json":"country"`
+	Loc  string `json:"loc"`
+}
+
 type Location struct {
 	Lat     float64 `json:"latitude"`
 	Lon     float64 `json:"longitude"`
+	Name    string  `json:"name"`
 	Country string  `json:"country"`
 }

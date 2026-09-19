@@ -7,6 +7,8 @@ import (
 	"net/http"
 	"net/url"
 	"time"
+	"strings"
+	"strconv"
 )
 
 func GetLocatoinCoordinates(place string) (*Location, error) {
@@ -79,27 +81,51 @@ func GetLocatoinCoordinatesWithoutArguments() (*Location, error) {
 
 	url := buildLocationUrl()
 	resp, err := client.Get(url)
+
 	if err != nil {
 		return nil, fmt.Errorf("Error: %w\n", err)
 
 	}
 
-	if resp.StatusCode != http.StatusOK{
-		return nil, fmt.Errorf("Error: %v\n",resp.Status)
+	if resp.StatusCode != http.StatusOK {
+		return nil, fmt.Errorf("Error: %v\n", resp.Status)
 	}
 	defer resp.Body.Close()
 
 	//Unmarshalling
-	var coordinates Location
+	var coordinates NoArg
 	err = json.NewDecoder(resp.Body).Decode(&coordinates)
-	
-	if err != nil{
-		return nil, fmt.Errorf("Error in unmarshalling: %w\n",err)
+
+	if err != nil {
+		return nil, fmt.Errorf("Error in unmarshalling: %w\n", err)
 	}
 
-	return &coordinates, nil
+	//Spliting through "," cause only one loc comes you forget it
+	parts := strings.Split(coordinates.Loc, ",")
+
+	if len(parts) != 2{
+		return nil, errors.New("Invalid location coordinates")
+	}
+	lat, err := strconv.ParseFloat(parts[1], 64)
+	if err != nil{
+		return nil, fmt.Errorf("Invalid longitude: %w",err)
+	}
+	
+	lon, err := strconv.ParseFloat(parts[1],64)
+	if err != nil{
+		return nil, fmt.Errorf("Invalid longitude: %w", err)
+	}
+
+
+	return &Location{
+		Lat: lat,
+		Lon: lon,
+		Name: coordinates.City,
+		Country: coordinates.Con,
+	}, nil
 
 }
+
 
 func buildUrl(place string) string {
 	encodePlace := url.QueryEscape(place)
@@ -109,9 +135,17 @@ func buildUrl(place string) string {
 func buildWeatherUrl(lat, lon float64) string {
 
 	return fmt.Sprintf("https://api.open-meteo.com/v1/forecast?latitude=%.6f&longitude=%.6f&current=temperature_2m,weather_code,relative_humidity_2m,wind_speed_10m,precipitation", lat, lon)
-
+	
 }
 
 func buildLocationUrl() string {
-	return "https://ipapi.co/json/"
+	return "https://ipinfo.io/json"
+}
+
+
+func WeahterCodeConvertion(code uint8)(condition string, err error){
+
+	
+
+	return "string lol", nil
 }

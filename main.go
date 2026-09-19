@@ -4,12 +4,11 @@ import (
 	weathers "GeoShan/weather"
 	"fmt"
 	"os"
+
 	"charm.land/lipgloss/v2"
 )
 
 func main() {
-
-
 
 	if len(os.Args) > 1 {
 		place := os.Args[1]
@@ -33,15 +32,32 @@ func main() {
 			return
 		}
 
+		fmt.Printf("Country: %v\nCity: %v\nLatitude: %v\nLongitude: %v\n", something.Country, something.Name, something.Lat, something.Lon)
+
 		fmt.Println(weather_info)
 
-	}else {
-		fmt.Println("upcoming feature ")
+	} else {
+		var coordinates *weathers.Location
 
-		
+		coordinates, err := weathers.GetLocatoinCoordinatesWithoutArguments()
+		if err != nil {
+			fmt.Printf("%v", err)
+			return
+		}
+
+		var weather_info_without_args *weathers.ApiInfo
+
+		weather_info_without_args, err = weathers.GetWeatherInfo(coordinates)
+		if err != nil {
+			fmt.Printf("%v\n", err)
+		}
+
+		fmt.Printf("Country: %v\nCity: %v\nLatitude: %v\nLongitude: %v\n", coordinates.Country, coordinates.Name, coordinates.Lat, coordinates.Lon)
+		fmt.Println(weather_info_without_args)
+
 	}
 
-		style := lipgloss.NewStyle().
+	style := lipgloss.NewStyle().
 		Bold(true).
 		Width(60).
 		Foreground(lipgloss.Color("#FAFAFA")).
@@ -49,9 +65,7 @@ func main() {
 		Padding(2, 4).
 		Align(lipgloss.Center)
 
-		fmt.Println(style.Render("Kolhapur"))
-		fmt.Print("hii")
+	fmt.Println(style.Render("Currenty working"))
+	fmt.Print("hii")
 
 }
-
-
