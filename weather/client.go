@@ -9,7 +9,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"io"
 )
 
 func GetLocatoinCoordinates(place string) (*Location, error) {
@@ -57,7 +56,6 @@ func GetWeatherInfo(info *Location) (*ApiInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error in respose: %w\n", err)
 	}
-	fmt.Println("Weather API status:", resp.Status)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
@@ -89,22 +87,12 @@ func GetLocatoinCoordinatesWithoutArguments() (*Location, error) {
 
 	}
 
-	
 
-	if resp.StatusCode != http.StatusOK {
+	if resp.StatusCode != http.StatusOK{
 		return nil, fmt.Errorf("Error: %v\n", resp.Status)
 	}
+
 	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-	body, _ := io.ReadAll(resp.Body)
-
-	return nil, fmt.Errorf(
-		"weather API error (%d): %s",
-		resp.StatusCode,
-		string(body),
-	)
-}
 
 	//Unmarshalling
 	var coordinates NoArg
