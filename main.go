@@ -34,7 +34,7 @@ func main() {
 		fmt.Printf("%v\n", err)
 		return
 	}
-	fmt.Printf("Location: %+v\n", location)
+
 
 	weather, err = weathers.GetWeatherInfo(location)
 	if err != nil {
