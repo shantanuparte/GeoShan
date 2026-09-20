@@ -9,6 +9,7 @@ import (
 	"strconv"
 	"strings"
 	"time"
+	"io"
 )
 
 func GetLocatoinCoordinates(place string) (*Location, error) {
@@ -87,10 +88,22 @@ func GetLocatoinCoordinatesWithoutArguments() (*Location, error) {
 
 	}
 
+	
+
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("Error: %v\n", resp.Status)
 	}
 	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+	body, _ := io.ReadAll(resp.Body)
+
+	return nil, fmt.Errorf(
+		"weather API error (%d): %s",
+		resp.StatusCode,
+		string(body),
+	)
+}
 
 	//Unmarshalling
 	var coordinates NoArg
@@ -106,9 +119,9 @@ func GetLocatoinCoordinatesWithoutArguments() (*Location, error) {
 	if len(parts) != 2 {
 		return nil, errors.New("Invalid location coordinates")
 	}
-	lat, err := strconv.ParseFloat(parts[1], 64)
+	lat, err := strconv.ParseFloat(parts[0], 64)
 	if err != nil {
-		return nil, fmt.Errorf("Invalid longitude: %w", err)
+		return nil, fmt.Errorf("Invalid latitude: %w", err)
 	}
 
 	lon, err := strconv.ParseFloat(parts[1], 64)

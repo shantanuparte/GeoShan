@@ -17,7 +17,7 @@ type ApiInfo struct {
 
 type NoArg struct {
 	City string `json:"city"`
-	Con  string `json":"country"`
+	Con  string `json:"country"`
 	Loc  string `json:"loc"`
 }
 
