@@ -14,7 +14,7 @@ import (
 
 func GetLocatoinCoordinates(place string) (*Location, error) {
 	client := &http.Client{
-		Timeout: time.Second * 5,
+		Timeout: time.Second * 15,
 	}
 
 	url := buildUrl(place)
@@ -48,7 +48,7 @@ func GetLocatoinCoordinates(place string) (*Location, error) {
 func GetWeatherInfo(info *Location) (*ApiInfo, error) {
 
 	client := &http.Client{
-		Timeout: time.Second * 5,
+		Timeout: time.Second * 15,
 	}
 
 	url := buildWeatherUrl(info.Lat, info.Lon)
@@ -57,6 +57,7 @@ func GetWeatherInfo(info *Location) (*ApiInfo, error) {
 	if err != nil {
 		return nil, fmt.Errorf("Error in respose: %w\n", err)
 	}
+	fmt.Println("Weather API status:", resp.Status)
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
@@ -77,7 +78,7 @@ func GetWeatherInfo(info *Location) (*ApiInfo, error) {
 func GetLocatoinCoordinatesWithoutArguments() (*Location, error) {
 
 	client := &http.Client{
-		Timeout: time.Second * 5,
+		Timeout: time.Second * 15,
 	}
 
 	url := buildLocationUrl()

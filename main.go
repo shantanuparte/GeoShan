@@ -4,6 +4,7 @@ import (
 	weathers "GeoShan/weather"
 	"fmt"
 	"os"
+	"strings"
 
 	"charm.land/lipgloss/v2"
 	"github.com/common-nighthawk/go-figure"
@@ -47,7 +48,7 @@ func main() {
 
 func Render(location *weathers.Location, weather *weathers.ApiInfo) {
 
-	fig := figure.NewFigure(location.Name, "doom", true)
+	fig := figure.NewFigure(asciiCityName(location.Name), "doom", true)
 	countryStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#A7A7B3")).
 		Italic(true).
@@ -104,4 +105,26 @@ func Render(location *weathers.Location, weather *weathers.ApiInfo) {
 			),
 		)
 	fmt.Println(container)
+}
+
+func asciiCityName(name string) string {
+	return strings.Map(func(r rune) rune {
+		switch r {
+		case 'ā', 'á', 'à', 'ä':
+			return 'a'
+		case 'ī', 'í', 'ì', 'ï':
+			return 'i'
+		case 'ū', 'ú', 'ù', 'ü':
+			return 'u'
+		case 'ō', 'ó', 'ò', 'ö':
+			return 'o'
+		case 'ē', 'é', 'è', 'ë':
+			return 'e'
+		default:
+			if r > 127 {
+				return -1
+			}
+			return r
+		}
+	}, name)
 }
